@@ -1,4 +1,4 @@
-# Blinky with FreeRTOS project
+# Blinky with Keil RTX5 project
 
 This is the simple CMSIS-RTOS2 Keil RTX5 based example for
 ARM 'Cortex-M3 DesignStart' device using Arm Virtual Hardware.
