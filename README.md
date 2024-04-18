@@ -81,8 +81,10 @@ The project is configured for execution on Arm Virtual Hardware which removes th
 
 ## Trouble Shooting
 
-1. If you get some compiler error such as the below, Pleasd try to activate Arm compiler license : https://www.keil.arm.com/mdk-community/
-  ```comment
-armclang: error: Failed to check out a license.
-The license file could not be found. Check that ARMLMD_LICENSE_FILE is set correctly.
-  ```
+1. If you get some compiler error such as the below, Pleasd try to activate Arm compiler license
+> armclang: error: Failed to check out a license.
+> The license file could not be found. Check that ARMLMD_LICENSE_FILE is set correctly.
+
+- Keil MDK-Community : https://www.keil.arm.com/mdk-community/ 
+- Keil MDK-Essential : https://www.arm.com/en/products/development-tools/embedded-and-software/keil-mdk
+
