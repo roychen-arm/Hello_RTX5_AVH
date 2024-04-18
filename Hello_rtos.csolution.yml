@@ -1,0 +1,29 @@
+solution:
+  compiler: AC6
+  target-types:
+    - type: AVH
+      device: DS_CM3
+      optimize: none
+      define:
+        - __USE_LCD
+        - __USE_FPGA
+      misc:
+        - C:
+            - -std=c99
+          C-CPP:
+            - -fno-rtti
+            - -funsigned-char
+            - -fshort-enums
+            - -fshort-wchar
+            - -ffunction-sections
+          CPP:
+            - -xc++
+            - -std=c++11
+          ASM:
+            - -masm=auto
+          Link:
+            - --strict
+            - --summary_stderr
+            - --info summarysizes
+  projects:
+    - project: Hello_rtos.cproject.yml
