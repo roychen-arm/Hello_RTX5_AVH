@@ -2,12 +2,12 @@ on:
   pull_request: 
     branches: main
     paths:
-      - ./vcpkg-configuration.json
+      - vcpkg/*
       - .github/workflows/vcpkg-action.yml
   push:
     branches: main
     paths:
-      - ./vcpkg-configuration.json
+      - vcpkg/*
       - .github/workflows/vcpkg-action.yml
   workflow_dispatch:
 
@@ -22,7 +22,7 @@ jobs:
       - name: Activate vcpkg environment
         uses: ./vcpkg
         with:
-          config: ./vcpkg-configuration.json
+          config: ./vcpkg/vcpkg-configuration.json
 
       - name: Verify some tools
         run: |
