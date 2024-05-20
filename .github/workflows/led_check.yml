@@ -1,0 +1,52 @@
+on: 
+  pull_request: 
+    branches: main
+    paths:
+      - vcpkg/*
+      - .github/workflows/vcpkg-action.yml
+  push:
+    branches: main
+    paths:
+      - vcpkg/*
+      - .github/workflows/vcpkg-action.yml
+  workflow_dispatch:
+
+jobs:
+  test:
+    name: Test vcpkg action
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Activate Arm license
+        uses: JonatanAntoni/actions/armlm@main
+        with:
+          server: https://mdk-preview.keil.arm.com
+          product: KEMDK-COM0
+          code:
+
+      - name: Setup vcpkg environment
+        uses: JonatanAntoni/actions/vcpkg@main
+        with:
+            config: "./vcpkg-configuration.json"
+            vcpkg-root: "${{ github.workspace }}/.vcpkg"
+            cache: "-"
+
+      - name: Run [check off count] test for M7 platform
+        run: |
+          cbuild ./Hello_rtos.csolution.yml --context-set --update-rte --packs --context Hello_rtos+AVH
+          FVP_MPS2_Cortex-M7 out/Hello_rtos/AVH/Hello_rtos.axf --stat --simlimit 24 $* > led_check.log
+          count=$(grep -c "off" led_check.log)
+          echo "Found 'off' ${count} times in led_check.log ..."
+      - name: Archive results
+        uses: actions/upload-artifact@v2
+        with:
+          name: results
+          path: |
+            led_check.log
+            out/Hello_rtos/AVH/Hello_rtos.axf
+            out/Hello_rtos/AVH/Hello_rtos.axf.map
+          retention-days: 1
+          if-no-files-found: error
+        if: always()
