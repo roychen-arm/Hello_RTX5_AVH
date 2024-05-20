@@ -1,0 +1,9 @@
+build-idx:
+  generated-by: csolution version 2.3.0
+  csolution: Hello_rtos.csolution.yml
+  cprojects:
+    - cproject: Hello_rtos.cproject.yml
+  cbuilds:
+    - cbuild: Hello_rtos+AVH.cbuild.yml
+      project: Hello_rtos
+      configuration: +AVH

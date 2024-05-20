@@ -1,0 +1,14 @@
+cbuild-pack:
+  resolved-packs:
+    - resolved-pack: ARM::CMSIS@5.9.0
+      selected-by-pack:
+        - ARM::CMSIS@5.9.0
+    - resolved-pack: Keil::ARM_Compiler@1.7.2
+      selected-by-pack:
+        - Keil::ARM_Compiler@1.7.2
+    - resolved-pack: Keil::MDK-Middleware@7.16.0
+      selected-by-pack:
+        - Keil::MDK-Middleware@7.16.0
+    - resolved-pack: Keil::V2M-MPS2_DSx_BSP@1.1.0
+      selected-by-pack:
+        - Keil::V2M-MPS2_DSx_BSP@1.1.0

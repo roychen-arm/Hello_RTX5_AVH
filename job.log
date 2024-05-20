@@ -1,0 +1,93 @@
+warning: vcpkg-artifacts is experimental and may change at any time.
+Artifact                                Version  Status    Dependency Summary                                                
+arm:tools/open-cmsis-pack/cmsis-toolbox 2.3.0    installed            Arm CMSIS-Toolbox                                      
+arm:compilers/arm/armclang              6.22.0   installed            Arm Compiler for Embedded                              
+arm:models/arm/avh-fvp                  11.22.39 installed            Arm Virtual Hardware for Cortex®-M based on Fast Models
+microsoft:tools/kitware/cmake           3.25.2   installed            Kitware's cmake tool                                   
+microsoft:tools/ninja-build/ninja       1.10.2   installed            Ninja is a small build system with a focus on speed.   
+
+[1/5] arm:tools/open-cmsis-pack/cmsis-toolbox already installed.
+[2/5] arm:compilers/arm/armclang already installed.
+[3/5] arm:models/arm/avh-fvp already installed.
+[4/5] microsoft:tools/kitware/cmake already installed.
+[5/5] microsoft:tools/ninja-build/ninja already installed.
+Activating: /home/jucche01/Documents/Hello_RTX5_AVH
+info cbuild: Build Invocation 2.3.0 (C) 2024 Arm Ltd. and Contributors
+/home/jucche01/Documents/Hello_RTX5_AVH/Hello_rtos.cbuild-pack.yml - info csolution: file is already up-to-date
+/home/jucche01/Documents/Hello_RTX5_AVH/Hello_rtos.cbuild-idx.yml - info csolution: file is already up-to-date
+/home/jucche01/Documents/Hello_RTX5_AVH/Hello_rtos.cbuild-set.yml - info csolution: file is already up-to-date
+/home/jucche01/Documents/Hello_RTX5_AVH/Hello_rtos+AVH.cbuild.yml - info csolution: file is already up-to-date
+/home/jucche01/Documents/Hello_RTX5_AVH/Hello_rtos+AVH.cprj - info csolution: file generated successfully
+info cbuild: Processing 1 context(s)
+info cbuild: Retrieve build information for context: "Hello_rtos+AVH"
+======================================
+info cbuild: Building "Hello_rtos+AVH"
+
+M650: Command completed successfully.
+
+M652: Generated file for project build: '/home/jucche01/Documents/Hello_RTX5_AVH/tmp/Hello_rtos/AVH/CMakeLists.txt'
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/jucche01/Documents/Hello_RTX5_AVH/tmp/Hello_rtos/AVH
+ninja: no work to do.
+info cbuild: build finished successfully!
+telnetterminal0: Listening for serial connection on port 5000
+telnetterminal1: Listening for serial connection on port 5001
+telnetterminal2: Listening for serial connection on port 5002
+LED : on
+LED : off
+LED : on
+LED : off
+LED : on
+LED : off
+LED : on
+LED : off
+LED : on
+LED : off
+LED : on
+LED : off
+LED : on
+LED : off
+LED : on
+LED : off
+LED : on
+LED : off
+LED : on
+LED : off
+LED : on
+LED : off
+LED : on
+LED : off
+LED : on
+LED : off
+LED : on
+LED : off
+LED : on
+LED : off
+LED : on
+LED : off
+LED : on
+LED : off
+LED : on
+LED : off
+LED : on
+LED : off
+LED : on
+LED : off
+LED : on
+LED : off
+LED : on
+
+Info: Simulation is stopping. Reason: Simulated time has been exceeded.
+
+Info: /OSCI/SystemC: Simulation stopped by user.
+
+--- FVP_MPS2_Cortex_M7 statistics: --------------------------------------------
+Simulated time                          : 24.000000s
+User time                               : 2.630434s
+System time                             : 0.278458s
+Wall time                               : 23.942687s
+Performance index                       : 1.00
+armcortexm7ct                           :  25.06 MIPS (   599980813 Inst)
+Memory highwater mark                   : 0x12a8d000 bytes ( 0.292 GB )
+-------------------------------------------------------------------------------
