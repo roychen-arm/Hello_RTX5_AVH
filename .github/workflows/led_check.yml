@@ -6,8 +6,6 @@ on:
       - *.json
   push:
     branches: [ main ]
-
-# To allow you to run this workflow manually from the GitHub Actions tab add
   workflow_dispatch:
 
 jobs:
