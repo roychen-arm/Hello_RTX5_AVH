@@ -4,12 +4,8 @@ project:
     - pack: Keil::ARM_Compiler@1.7.2
     - pack: Keil::MDK-Middleware@7.16.0
     - pack: Keil::V2M-MPS2_DSx_BSP@1.1.0
-  setups:
-    - setup: AVH AC6
-      for-context: +AVH
-      for-compiler: AC6
-      linker:
-        - script: V2M-MPS2.sct
+  linker:
+    - script: V2M-MPS2.sct
   groups:
     - group: Source Files
       files:
