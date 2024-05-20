@@ -1,14 +1,13 @@
 on: 
   pull_request: 
-    branches: main
     paths:
-      - vcpkg/*
-      - .github/workflows/vcpkg-action.yml
+      - *.c
+      - *.yml
+      - *.json
   push:
-    branches: main
-    paths:
-      - vcpkg/*
-      - .github/workflows/vcpkg-action.yml
+    branches: [ main ]
+
+# To allow you to run this workflow manually from the GitHub Actions tab add
   workflow_dispatch:
 
 jobs:
