@@ -17,18 +17,18 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Activate Arm license
-        uses: JonatanAntoni/actions/armlm@main
-        with:
-          server: https://mdk-preview.keil.arm.com
-          product: KEMDK-COM0
-
       - name: Setup vcpkg environment
         uses: JonatanAntoni/actions/vcpkg@main
         with:
             config: "./vcpkg-configuration.json"
             vcpkg-root: "${{ github.workspace }}/.vcpkg"
             cache: "-"
+
+      - name: Activate Arm license
+        uses: JonatanAntoni/actions/armlm@main
+        with:
+          server: https://mdk-preview.keil.arm.com
+          product: KEMDK-COM0
 
       - name: Run [check off count] test for M7 platform
         run: |
