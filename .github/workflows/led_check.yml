@@ -1,11 +1,12 @@
 on: 
-  pull_request: 
-    paths:
-      - *.c
-      - *.yml
-      - *.json
   push:
     branches: [ main ]
+  pull_request: 
+    paths:
+      - Hello_rtos.c
+      - Hello_rtos.csolution.yml
+      - Hello_rtos.cproject.yml
+      - vcpkg-configuration.json
   workflow_dispatch:
 
 jobs:
