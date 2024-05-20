@@ -2,12 +2,12 @@ on:
     pull_request: 
       branches: main
       paths:
-        - vcpkg/*
+        - ./vcpkg-configuration.json
         - .github/workflows/vcpkg-action.yml
     push:
       branches: main
       paths:
-        - vcpkg/*
+        - ./vcpkg-configuration.json
         - .github/workflows/vcpkg-action.yml
     workflow_dispatch:
   
