@@ -32,7 +32,7 @@ jobs:
 
       - name: Run [check off count] test for M7 platform
         run: |
-          cbuild ./Hello_rtos.csolution.yml --context-set --update-rte --packs --context Hello_rtos+AVH
+          cbuild ./Hello_rtos.csolution.yml --context-set --update-rte --packs --context Hello_rtos+AVH_CI
           FVP_MPS2_Cortex-M7 out/Hello_rtos/AVH/Hello_rtos.axf --stat --simlimit 24 $* > led_check.log
           count=$(grep -c "off" led_check.log)
           echo "Found 'off' ${count} times in led_check.log ..."

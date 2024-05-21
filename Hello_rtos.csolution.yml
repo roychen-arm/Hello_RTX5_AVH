@@ -25,5 +25,27 @@ solution:
             - --strict
             - --summary_stderr
             - --info summarysizes
+
+    - type: AVH_CI
+      device: DS_CM3
+      optimize: none
+      misc:
+        - C:
+            - -std=c99
+          C-CPP:
+            - -fno-rtti
+            - -funsigned-char
+            - -fshort-enums
+            - -fshort-wchar
+            - -ffunction-sections
+          CPP:
+            - -xc++
+            - -std=c++11
+          ASM:
+            - -masm=auto
+          Link:
+            - --strict
+            - --summary_stderr
+            - --info summarysizes
   projects:
     - project: Hello_rtos.cproject.yml
