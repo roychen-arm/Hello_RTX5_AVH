@@ -43,8 +43,8 @@ jobs:
           name: results
           path: |
             led_check.log
-            out/Hello_rtos/AVH/Hello_rtos.axf
-            out/Hello_rtos/AVH/Hello_rtos.axf.map
+            out/Hello_rtos/AVH_CI/Hello_rtos.axf
+            out/Hello_rtos/AVH_CI/Hello_rtos.axf.map
           retention-days: 1
           if-no-files-found: error
         if: always()
