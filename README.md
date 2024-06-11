@@ -67,7 +67,7 @@ The project is generated using the [CMSIS-Toolbox](https://github.com/Open-CMSIS
 
 >**Note:** During the build process required packs may be downloaded.
 
-You can refer [`CMSIS Project Manager - Users Manual`](https://github.com/Open-CMSIS-Pack/devtools/blob/main/tools/projmgr/docs/Manual/Overview.md) for more detail usage of cpackget/csolution/cbuild.
+You can refer [`CMSIS Project Manager - Users Manual`](https://github.com/Open-CMSIS-Pack/cmsis-toolbox/blob/main/docs/build-overview.md) for more detail usage of cpackget/csolution/cbuild.
 
 ## Execute Project
 
