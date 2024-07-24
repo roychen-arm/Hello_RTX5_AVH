@@ -18,14 +18,14 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Setup vcpkg environment
-        uses: JonatanAntoni/actions/vcpkg@main
+        uses: ARM-software/cmsis-actions/vcpkg@v1
         with:
             config: "./vcpkg-configuration.json"
-            vcpkg-root: "${{ github.workspace }}/.vcpkg"
+            vcpkg-downloads: "${{ github.workspace }}/.vcpkg/downloads"
             cache: "-"
 
       - name: Activate Arm license
-        uses: JonatanAntoni/actions/armlm@main
+        uses: ARM-software/cmsis-actions/armlm@v1
         with:
           server: https://mdk-preview.keil.arm.com
           product: KEMDK-COM0
