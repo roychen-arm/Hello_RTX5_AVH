@@ -99,10 +99,10 @@ This action can be used to activate a development environment based on a `vcpkg-
 
 ```yml
 - name: Setup vcpkg environment
-  uses: JonatanAntoni/actions/vcpkg@main
+  uses: ARM-software/cmsis-actions/vcpkg@v1
   with:
     config: "./vcpkg-configuration.json"
-    vcpkg-root: "${{ github.workspace }}/.vcpkg"
+    vcpkg-downloads: "${{ github.workspace }}/.vcpkg/downloads"
     cache: "-"
 ```
 The activated environment is preserved into `$GITHUB_PATH` and `$GITHUB_ENV` so that it can be used by subsequent steps.
@@ -111,10 +111,11 @@ The activated environment is preserved into `$GITHUB_PATH` and `$GITHUB_ENV` so 
 This action can be used to activate an [`Arm user based license`](https://developer.arm.com/documentation/102516/1-2/Activate-and-deactivate-your-product-license/Activate-your-product-using-a-license-server?lang=en) using `armlm` license manager.
 ```yml
 - name: Activate Arm license
-  uses: JonatanAntoni/actions/armlm@main
+  uses: ARM-software/cmsis-actions/armlm@v1
   with:
     server: https://mdk-preview.keil.arm.com
-    product: KEMDK-COM0
+    server: <custom license server>
     code: <personal product code>
+    product: KEMDK-COM0
 ```
 By default, the action activates the free [`Keil MDK v6 Community license`](https://learn.arm.com/learning-paths/microcontrollers/vcpkg-tool-installation/licenseactivation/).
