@@ -36,7 +36,7 @@ You can refer [Arm Developer Hub guide](https://learn.arm.com/learning-paths/mic
 
 ## Project Structure
 
-The project is generated using the [CMSIS-Toolbox](https://github.com/Open-CMSIS-Pack/devtools/blob/main/tools/projmgr/docs/Manual/Overview.md) and is defined in [`csolution`](https://github.com/Open-CMSIS-Pack/devtools/blob/main/tools/projmgr/docs/Manual/YML-Input-Format.md) format:
+The project is generated using the [CMSIS-Toolbox](https://github.com/Open-CMSIS-Pack/cmsis-toolbox) and is defined in [`csolution`](https://github.com/Open-CMSIS-Pack/cmsis-toolbox/blob/main/docs/YML-Input-Format.md) format:
 
 
 - [`Hello_rtos.csolution.yml`](./Hello_rtos.csolution.yml) : defines the compiler option and target-types (along with the compiler).
