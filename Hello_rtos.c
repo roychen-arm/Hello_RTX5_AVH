@@ -1,249 +1,113 @@
-/*----------------------------------------------------------------------------
- * Name:    Blinky.c
- * Purpose: LED Flasher
- *----------------------------------------------------------------------------
- * This file is part of the uVision/ARM development tools.
- * This software may only be used under the terms of a valid, current,
- * end user licence from KEIL for a compatible version of KEIL software
- * development tools. Nothing else gives you the right to use this software.
- *
- * This software is supplied "AS IS" without warranties of any kind.
- *
- * Copyright (c) 2017 Keil - An ARM Company. All rights reserved.
- *----------------------------------------------------------------------------*/
-
 #include <stdio.h>
+#include "Board_LED.h"
+#include "Board_Buttons.h"
+#include "Board_GLCD.h"
+#include "GLCD_Config.h"
+#include "cmsis_compiler.h"  // 適用於大多數 CMSIS 平台（推薦）
+#include "DS_CM3.h"
 
-#include "cmsis_os2.h"                  /* ::CMSIS:RTOS2 */
-#include "Board_LED.h"                  /* ::Board Support:LED */
-#include "Board_Buttons.h"              /* ::Board Support:Buttons */
-#include "Board_GLCD.h"                 /* ::Board Support:Graphic LCD */
-#include "GLCD_Config.h"                /* Keil.V2M-MPS2::Board Support:Graphic LCD */
-
-#include "RTE_Components.h"             /* Component selection */
-#include CMSIS_device_header
-
-#ifdef RTE_Compiler_EventRecorder
-#include "EventRecorder.h"
-#endif
-
-extern GLCD_FONT     GLCD_Font_16x24;
+extern GLCD_FONT GLCD_Font_16x24;
 
 volatile int32_t delay_val = 500;
 
-osThreadId_t tid_thrLED;                /* Thread id of thread: LED */
-osThreadId_t tid_thrBUT;                /* Thread id of thread: BUT */
+void delay_ms(uint32_t ms) {
+    // 假設系統有1ms延遲函數。若無需精準，可用for-loop模擬
+    for (volatile uint32_t i = 0; i < ms * 4000; i++) __NOP();
+}
 
-osMutexId_t mut_GLCD;                   /* Mutex to control GLCD access */
-
-
-
-/*----------------------------------------------------------------------------
-  display Button pressed on GLCD
- *---------------------------------------------------------------------------*/
-void BUT_OnLCD (uint32_t butNum) {
-
+void BUT_OnLCD(uint32_t butNum) {
 #ifdef __USE_LCD
-  osMutexAcquire(mut_GLCD, osWaitForever);
-  GLCD_SetBackgroundColor(GLCD_COLOR_WHITE);
-  GLCD_SetForegroundColor(GLCD_COLOR_BLACK);
-  GLCD_DrawChar((9+butNum)*16, 7*24, 0x80+1);     /* Circle full */
-  osMutexRelease(mut_GLCD);
+    GLCD_SetBackgroundColor(GLCD_COLOR_WHITE);
+    GLCD_SetForegroundColor(GLCD_COLOR_BLACK);
+    GLCD_DrawChar((9+butNum)*16, 7*24, 0x80+1);
 #endif
 }
 
-/*----------------------------------------------------------------------------
-  display button released GLCD
- *---------------------------------------------------------------------------*/
-void BUT_OffLCD (uint32_t butNum) {
-
+void BUT_OffLCD(uint32_t butNum) {
 #ifdef __USE_LCD
-  osMutexAcquire(mut_GLCD, osWaitForever);
-  GLCD_SetBackgroundColor(GLCD_COLOR_WHITE);
-  GLCD_SetForegroundColor(GLCD_COLOR_LIGHT_GREY);
-  GLCD_DrawChar((9+butNum)*16, 7*24, 0x80+0);     /* Circle full */
-  osMutexRelease(mut_GLCD);
+    GLCD_SetBackgroundColor(GLCD_COLOR_WHITE);
+    GLCD_SetForegroundColor(GLCD_COLOR_LIGHT_GREY);
+    GLCD_DrawChar((9+butNum)*16, 7*24, 0x80+0);
 #endif
 }
 
-/*----------------------------------------------------------------------------
-  display LED on GLCD
- *---------------------------------------------------------------------------*/
-void LED_OnLCD (uint32_t ledNum) {
-
+void LED_OnLCD(uint32_t ledNum) {
 #ifdef __USE_LCD
-  osMutexAcquire(mut_GLCD, osWaitForever);
-  GLCD_SetBackgroundColor(GLCD_COLOR_WHITE);
-  GLCD_SetForegroundColor(GLCD_COLOR_GREEN);
-  GLCD_DrawChar((9+ledNum)*16, 6*24, 0x80+1);     /* Circle full */
-  osMutexRelease(mut_GLCD);
+    GLCD_SetBackgroundColor(GLCD_COLOR_WHITE);
+    GLCD_SetForegroundColor(GLCD_COLOR_GREEN);
+    GLCD_DrawChar((9+ledNum)*16, 6*24, 0x80+1);
 #endif
 }
 
-/*----------------------------------------------------------------------------
-  display LED off GLCD
- *---------------------------------------------------------------------------*/
-void LED_OffLCD (uint32_t ledNum) {
-
+void LED_OffLCD(uint32_t ledNum) {
 #ifdef __USE_LCD
-  osMutexAcquire(mut_GLCD, osWaitForever);
-  GLCD_SetBackgroundColor(GLCD_COLOR_WHITE);
-  GLCD_SetForegroundColor(GLCD_COLOR_LIGHT_GREY);
-  GLCD_DrawChar((9+ledNum)*16, 6*24, 0x80+0);     /* Circle empty */
-  osMutexRelease(mut_GLCD);
+    GLCD_SetBackgroundColor(GLCD_COLOR_WHITE);
+    GLCD_SetForegroundColor(GLCD_COLOR_LIGHT_GREY);
+    GLCD_DrawChar((9+ledNum)*16, 6*24, 0x80+0);
 #endif
 }
 
-/*----------------------------------------------------------------------------
-  thrLED: blink LED
- *----------------------------------------------------------------------------*/
-void thrLED(void *argument) {
-  uint32_t led_max    = LED_GetCount();
-  uint32_t led_num    = 0;
+int main(void) {
+    uint32_t led_max = LED_GetCount();
+    uint32_t led_num = 0;
+    uint32_t button_max = Buttons_GetCount();
+    uint32_t button_state;
+    uint32_t button_num;
+    uint32_t button_msk = (1U << button_max) - 1;
 
-  for (;;) {
-    osThreadFlagsWait(0x0001, osFlagsWaitAny ,osWaitForever);
-    LED_On(led_num);                                           /* Turn specified LED on */
-    LED_OnLCD(led_num);
-	  printf("LED : on\n");
+    SystemCoreClockUpdate();
+    LED_Initialize();
+    Buttons_Initialize();
 
-    osThreadFlagsWait(0x0001, osFlagsWaitAny ,osWaitForever);
-    LED_Off(led_num);                                          /* Turn specified LED off */
-    LED_OffLCD(led_num);
-	  printf("LED : off\n");
+#ifdef __USE_LCD
+    GLCD_Initialize();
+    GLCD_SetFont(&GLCD_Font_16x24);
+    GLCD_SetBackgroundColor(GLCD_COLOR_WHITE);
+    GLCD_ClearScreen();
+    GLCD_SetBackgroundColor(GLCD_COLOR_BLUE);
+    GLCD_SetForegroundColor(GLCD_COLOR_RED);
+    GLCD_DrawString(0*16, 0*24, "   BareMetal Blinky ");
+    GLCD_DrawString(0*16, 1*24, "     No RTOS        ");
+    GLCD_SetBackgroundColor(GLCD_COLOR_WHITE);
+    GLCD_SetForegroundColor(GLCD_COLOR_BLACK);
+    GLCD_DrawString(2*16, 6*24, "LED:");
+    GLCD_DrawString(2*16, 7*24, "KEY:");
 
-    led_num++;                                                 /* Change LED number */
-    if (led_num >= led_max) {
-      led_num = 0;                                             /* Restart with first LED */
+    for (int i = 0; i < led_max; i++) {
+        GLCD_DrawChar((9+i)*16, 6*24, 0x80+0);
     }
-  }
+    for (int i = 0; i < button_max; i++) {
+        GLCD_DrawChar((9+i)*16, 7*24, 0x80+0);
+    }
+#endif
 
-}
-
-/*----------------------------------------------------------------------------
-  thrBUT: check button state
- *----------------------------------------------------------------------------*/
-void thrBUT(void *argument) {
-	uint32_t button_state;
-	uint32_t button_num;
-  uint32_t button_max;
-  uint32_t button_msk;
-
-  button_max = Buttons_GetCount();
-  button_msk = (1U << button_max) - 1;
-
-  for (;;) {
-    osDelay(delay_val);                                        /* Wait */
-
-    do {
-			button_state = Buttons_GetState();
-
-      for (button_num = 0; button_num < button_max; button_num++) {
-        if (button_state & (1ul << button_num)) {
-          BUT_OnLCD(button_num);
-        } else {
-          BUT_OffLCD(button_num);
+    while (1) {
+        // ====== Button polling ======
+        button_state = Buttons_GetState();
+        for (button_num = 0; button_num < button_max; button_num++) {
+            if (button_state & (1U << button_num)) {
+                BUT_OnLCD(button_num);
+            } else {
+                BUT_OffLCD(button_num);
+            }
         }
-      }
 
-		} while (button_state & button_msk);
+        // Only blink if any button is pressed
+        if (button_state & button_msk) {
+            LED_On(led_num);
+            LED_OnLCD(led_num);
+            printf("LED %d : ON\n", led_num);
 
-    osThreadFlagsSet(tid_thrLED, 0x0001);
-  }
+            delay_ms(delay_val);
 
-}
+            LED_Off(led_num);
+            LED_OffLCD(led_num);
+            printf("LED %d : OFF\n", led_num);
 
-/*----------------------------------------------------------------------------
-  configure SystemCoreClock:
- *----------------------------------------------------------------------------*/
-void SystemCoreClockConfigure(void) {
+            led_num++;
+            if (led_num >= led_max) led_num = 0;
+        }
 
-	/* add code */
-}
-
-/*----------------------------------------------------------------------------
- * Application main thread
- *---------------------------------------------------------------------------*/
-void app_main (void *argument) {
-
-  mut_GLCD = osMutexNew(NULL);                                 /* create GLCD mutex */
-
-  tid_thrBUT = osThreadNew (thrBUT, NULL, NULL);               /* create BUT thread */
-  tid_thrLED = osThreadNew (thrLED, NULL, NULL);               /* create LED thread */
-
-  for (;;) {}
-}
-
-/*----------------------------------------------------------------------------
-  main: create tasks and start kernel
- *----------------------------------------------------------------------------*/
-int main (void) {
-  uint32_t button_msk = (1U << Buttons_GetCount()) - 1;
-#ifdef __USE_LCD
-  uint32_t ledMax = LED_GetCount() - 1;
-  uint32_t keyMax = Buttons_GetCount();
-	int32_t i;
-#endif
-
-  // System Initialization
-  SystemCoreClockConfigure();
-  SystemCoreClockUpdate();
-
-  LED_Initialize();                                            /* initalize LEDs */
-  Buttons_Initialize();                                        /* initalize Buttons */
-
-#ifdef __USE_LCD
-  GLCD_Initialize();                                           /* Initialize the GLCD */
-
-  /* display initial screen */
-  GLCD_SetFont(&GLCD_Font_16x24);
-  GLCD_SetBackgroundColor(GLCD_COLOR_WHITE);
-  GLCD_ClearScreen();
-  GLCD_SetBackgroundColor(GLCD_COLOR_BLUE);
-  GLCD_SetForegroundColor(GLCD_COLOR_RED);
-  GLCD_DrawString(0*16, 0*24, "   V2M-MPS2 Demo    ");
-  GLCD_DrawString(0*16, 1*24, "      Blinky        ");
-  GLCD_DrawString(0*16, 2*24, "   DesignStart      ");
-
-  GLCD_SetBackgroundColor(GLCD_COLOR_WHITE);
-  GLCD_SetForegroundColor(GLCD_COLOR_BLACK);
-  switch ((SCB->CPUID >> 4) & 0xFFF) {
-    case 0xC23:
-      GLCD_DrawString(0*16, 4*24, "   ARM Cortex-M3    ");
-      break;
-    case 0xC24:
-      GLCD_DrawString(0*16, 4*24, "   ARM Cortex-M4    ");
-      break;
-    case 0xC27:
-      GLCD_DrawString(0*16, 4*24, "   ARM Cortex-M7    ");
-      break;
-    default:
-      GLCD_DrawString(0*16, 4*24, "  unknown Cortex-M  ");
-      break;
-  }
-  GLCD_DrawString(2*16, 6*24, "LED:");
-  GLCD_DrawString(2*16, 7*24, "KEY:");
-
-  GLCD_SetForegroundColor (GLCD_COLOR_LIGHT_GREY);
-  for (i = 0; i <= ledMax; i++) {
-    GLCD_DrawChar((9+i)*16, 6*24, 0x80+0);                     /* draw empty circle */
-  }
-  for (i = 0; i <  keyMax; i++) {
-    GLCD_DrawChar((9+i)*16, 7*24, 0x80+0);                     /* draw empty circle */
-  }
-#endif
-
-#ifdef RTE_Compiler_EventRecorder
-  EventRecorderInitialize (0U, 1U);                            /* Initialize and start Event Recorder */
-  EventRecorderEnable (EventRecordError, 0xF0U, 0xF8U);        /* RTOS Events */
-  EventRecorderEnable (EventRecordAll,   0xF0U, 0xF4U);        /* Task, Queue, Timer, EventGroup, Heap Events */
-#endif
-
-  osKernelInitialize ();                                       /* initialize CMSIS-RTOS */
-
-  osThreadNew(app_main, NULL, NULL);                           /* create application main thread */
-
-  if (osKernelGetState() == osKernelReady) {
-    osKernelStart();                                           /* start thread execution */
-  }
+        delay_ms(delay_val);
+    }
 }
