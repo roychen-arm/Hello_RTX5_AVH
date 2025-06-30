@@ -3,15 +3,15 @@
 #include "Board_Buttons.h"
 #include "Board_GLCD.h"
 #include "GLCD_Config.h"
-#include "cmsis_compiler.h"  // 適用於大多數 CMSIS 平台（推薦）
+#include "cmsis_compiler.h" 
 #include "DS_CM3.h"
 
 extern GLCD_FONT GLCD_Font_16x24;
 
-volatile int32_t delay_val = 500;
+volatile int32_t delay_val = 5000;
 
 void delay_ms(uint32_t ms) {
-    // 假設系統有1ms延遲函數。若無需精準，可用for-loop模擬
+    // Assume there is a 1ms delay function in the system. If not needed to be precise, use a for-loop to simulate
     for (volatile uint32_t i = 0; i < ms * 4000; i++) __NOP();
 }
 
@@ -67,7 +67,7 @@ int main(void) {
     GLCD_SetBackgroundColor(GLCD_COLOR_BLUE);
     GLCD_SetForegroundColor(GLCD_COLOR_RED);
     GLCD_DrawString(0*16, 0*24, "   BareMetal Blinky ");
-    GLCD_DrawString(0*16, 1*24, "     No RTOS        ");
+    //GLCD_DrawString(0*16, 1*24, "     No RTOS        ");
     GLCD_SetBackgroundColor(GLCD_COLOR_WHITE);
     GLCD_SetForegroundColor(GLCD_COLOR_BLACK);
     GLCD_DrawString(2*16, 6*24, "LED:");
